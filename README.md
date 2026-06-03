@@ -70,6 +70,40 @@ data-streams/
 
 ---
 
+## Tạo dữ liệu Ground Truth (Labeled Parquet)
+
+> **Lưu ý**: Hai file `yellow_tripdata_labeled.parquet` (~224MB) và `green_tripdata_labeled.parquet` (~3MB) **không có trên GitHub** do kích thước quá lớn. Bạn cần tự tạo chúng trên máy trước khi dùng Benchmark Evaluator.
+
+**Yêu cầu**: Phải có sẵn 2 file dữ liệu gốc sau khi clone về:
+- `data-streams/datasets/taxi/yellow_tripdata_2026-03.parquet`
+- `data-streams/datasets/taxi/green_tripdata_2026-03.parquet`
+
+**Bước 1**: Mở file `data-streams/ai_batch_labeler.py` và sửa đường dẫn `base_dir` ở dòng 159 thành đường dẫn thực tế trên máy của bạn:
+
+```python
+# Tìm dòng này trong file ai_batch_labeler.py và sửa lại:
+base_dir = r"<đường dẫn đến thư mục project của bạn>\data-streams\datasets\taxi"
+
+# Ví dụ:
+base_dir = r"C:\Users\YourName\Documents\lab-do-an\data-streams\datasets\taxi"
+```
+
+**Bước 2**: Cài đặt thư viện (nếu chưa có) và chạy script:
+
+```cmd
+cd data-streams
+pip install pandas pyarrow scikit-learn numpy
+python ai_batch_labeler.py
+```
+
+Script sẽ xử lý tuần tự Green Taxi rồi Yellow Taxi. Thời gian chạy ước tính:
+- Green (~vài nghìn dòng): dưới 1 phút
+- Yellow (~4 triệu dòng): khoảng 5–15 phút tùy máy
+
+Sau khi hoàn tất, 2 file labeled sẽ xuất hiện trong `data-streams/datasets/taxi/` và Benchmark Evaluator (`http://localhost:8502`) sẽ hoạt động đầy đủ.
+
+---
+
 ## Cài đặt & Khởi động
 
 ### Bước 0 — Bắt buộc: Mở Docker Desktop trước
